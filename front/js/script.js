@@ -5,21 +5,19 @@
 //-- Je récupère les données contenues dans l'API grâce à Fetch --//
 
 fetch("http://localhost:3000/api/products")
-  //-- Je transforme le résultat de la promesse de Fetch en format json --//
+  //-- Je transforme le résultat de la promesse de Fetch en format JSON --//
 
   .then((res) => res.json())
 
-  //-- Je nomme 'api' l'objet json de la fonction .then précédente. La fonction fléchée 'allProducts' traite et utilise donc les données de 'api'.
+  //-- Je nomme 'api' l'objet JSON de la fonction .then précédente. La fonction fléchée 'allProducts' traite et utilise donc les données de 'api'.
 
   .then((api) => allProducts(api))
 
   //-- J'utilise la méthode catch pour traiter les erreurs qui peuvent survenir lors de la résolution de la promesse --//
 
-  .catch((_error) => {
-    alert("Le serveur ne répond pas.");
-  });
+  .catch(() => alert("Le serveur ne répond pas."));
 
-//------ Products ------//
+//------ PRODUCTS ------//
 
 //-- Je crée la fonction 'allProducts' qui utilise les données de l'api pour pouvoir générer dynamiquement du contenu sur la page d'accueil --//
 
