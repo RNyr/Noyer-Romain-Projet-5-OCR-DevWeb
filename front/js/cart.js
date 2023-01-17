@@ -167,3 +167,228 @@ let priceAmount = () => {
 //-- J'appelle la fonction priceAmount --//
 
 priceAmount();
+
+//------ REGEXP ------//
+
+//-- Je déclare les constantes qui stockent les RegExp que je vais utiliser --//
+
+const nameRegExp = /^[a-zA-Z]{3,20}$/;
+const addressRegExp = /^[a-zA-Z0-9\s,'-]*$/;
+const emailRegExp = /^[\w.-]+@[\w-]+\.[\w.]{2,}$/;
+
+//-- Je déclare la fonction principale qui va permettre de contrôler et de stocker les données saisies dans le formulaire puis de les envoyer au serveur --//
+
+let postForm = () => {
+  //-- Je cible l'élément 'order' de la page et créer un évènement au 'click' sur celui ci --//
+  const order = document.getElementById("order");
+  order.addEventListener("click", (e) => {
+    e.preventDefault();
+
+    //-- Je crée un objet 'contact' qui va récupérer et stocker les valeurs saisies dans chaque champs du formulaire --//
+
+    const contact = {
+      firstName: document.getElementById("firstName").value,
+      lastName: document.getElementById("lastName").value,
+      address: document.getElementById("address").value,
+      city: document.getElementById("city").value,
+      email: document.getElementById("email").value,
+    };
+
+    //-- Je déclare une fonction pour contrôler le prénom saisi dans le formulaire --//
+
+    let controlFirstName = () => {
+      //-- Je déclare une constante qui prend la valeur de 'firstName' de l'objet 'contact' --//
+
+      const validFirstName = contact.firstName;
+
+      //-- Je teste la valeur saisie avec la regexp 'nameRegExp', et la fonction retourne 'true' si la chaîne de caractère correspond à la regexp.
+
+      if (nameRegExp.test(validFirstName)) {
+        return true;
+      }
+
+      //-- Sinon je génère le message d'erreur en HTML en ciblant l'élément 'firstNameErrorMsg' --//
+      else {
+        let firstNameErrorMsg = document.getElementById("firstNameErrorMsg");
+        firstNameErrorMsg.innerText =
+          "Merci de vérifier le prénom, 3 caractères minimum, avec des lettres uniquement";
+
+        //-- La fonction retourne 'false' pour indiquer que les données saisies ne sont pas valides --//
+        return false;
+      }
+    };
+
+    //-- Je déclare une fonction pour contrôler le nom saisi dans le formulaire --//
+
+    function controlName() {
+      //-- Je déclare une constante qui prend la valeur de 'lastName' de l'objet 'contact' --//
+
+      const validName = contact.lastName;
+
+      //-- Je teste la valeur saisie avec la regexp 'nameRegExp', et la fonction retourne 'true' si la chaîne de caractère correspond à la regexp.
+
+      if (nameRegExp.test(validName)) {
+        return true;
+      } else {
+        //-- Sinon je génère le message d'erreur en HTML en ciblant l'élément 'lastNameErrorMsg' --//
+        let lastNameErrorMsg = document.getElementById("lastNameErrorMsg");
+        lastNameErrorMsg.innerText =
+          "Merci de vérifier le nom, 3 caractères minimum, avec des lettres uniquement";
+
+        //-- La fonction retourne 'false' pour indiquer que les données saisies ne sont pas valides --//
+
+        return false;
+      }
+    }
+
+    //-- Je déclare une fonction pour contrôler l'adresse saisie dans le formulaire --//
+
+    function controlAddress() {
+      //-- Je déclare une constante qui prend la valeur de 'address' de l'objet 'contact' --//
+
+      const validAddress = contact.address;
+
+      //-- Je teste la valeur saisie avec la regexp 'addressRegExp', et la fonction retourne 'true' si la chaîne de caractère correspond à la regexp.
+
+      if (addressRegExp.test(validAddress)) {
+        return true;
+      } else {
+        //-- Sinon je génère le message d'erreur en HTML en ciblant l'élément 'addressErrorMsg' --//
+
+        let addressErrorMsg = document.getElementById("addressErrorMsg");
+        addressErrorMsg.innerText =
+          "Merci de vérifier l'adresse, alphanumérique et sans caractères spéciaux";
+
+        //-- La fonction retourne 'false' pour indiquer que les données saisies ne sont pas valides --//
+
+        return false;
+      }
+    }
+
+    //-- Je déclare une fonction pour contrôler le nom de la ville saisi dans le formulaire --//
+
+    function controlCity() {
+      //-- Je déclare une constante qui prend la valeur de 'city' de l'objet 'contact' --//
+
+      const validCity = contact.city;
+
+      //-- Je teste la valeur saisie avec la regexp 'cityRegExp', et la fonction retourne 'true' si la chaîne de caractère correspond à la regexp.
+
+      if (addressRegExp.test(validCity)) {
+        return true;
+      } else {
+        //-- Sinon je génère le message d'erreur en HTML en ciblant l'élément 'cityErrorMsg' --//
+
+        let cityErrorMsg = document.getElementById("cityErrorMsg");
+        cityErrorMsg.innerText =
+          "Merci de vérifier le nom de la ville, 3 caractères minimum, avec des lettres uniquement";
+
+        //-- La fonction retourne 'false' pour indiquer que les données saisies ne sont pas valides --//
+
+        return false;
+      }
+    }
+
+    //-- Je déclare une fonction pour contrôler l'adresse mail de la ville saisie dans le formulaire --//
+
+    function controlEmail() {
+      //-- Je déclare une constante qui prend la valeur de 'email' de l'objet 'contact' --//
+
+      const validEmail = contact.email;
+
+      //-- Je teste la valeur saisie avec la regexp 'emailRegExp', et la fonction retourne 'true' si la chaîne de caractère correspond à la regexp.
+
+      if (emailRegExp.test(validEmail)) {
+        return true;
+      } else {
+        //-- Sinon je génère le message d'erreur en HTML en ciblant l'élément 'emailErrorMsg' --//
+
+        let emailErrorMsg = document.getElementById("emailErrorMsg");
+        emailErrorMsg.innerText = "Erreur ! Email non valide";
+
+        //-- La fonction retourne 'false' pour indiquer que les données saisies ne sont pas valides --//
+
+        return false;
+      }
+    }
+
+    //-- Je vérifie si toute les données saisies dans le formulaire sont valides en appellant les différentes fonctions de contrôle--//
+
+    function validControl() {
+      if (
+        controlFirstName() &&
+        controlName() &&
+        controlAddress() &&
+        controlCity() &&
+        controlEmail()
+      ) {
+        //-- Si les données sont valides alors je stocke les valeurs de l'objet 'contact' dans le local storage dans la clé 'contact' --//
+
+        localStorage.setItem("contact", JSON.stringify(contact));
+        return true;
+      }
+
+      //-- Sinon j'alerte l'utilisateur pour qu'il vérifie et corrige les données du formulaire --//
+      else {
+        alert("Merci de revérifier les données du formulaire");
+      }
+    }
+
+    //-- J'appelle la fonction du contrôle des données saisies --//
+    validControl();
+
+    //-- Je crée un objet 'sendFromData' qui contient l'objet 'contact' et le tableau 'products' --//
+
+    const sendFormData = {
+      contact,
+      products,
+    };
+
+    //-- Je définie les options de la requête fetch dans un objet 'options' --//
+
+    const options = {
+      //-- J'utilise la méthode 'POST' pour définir la méthode http à utiliser avec 'method' --//
+
+      method: "POST",
+
+      //-- Je définie les données à envoyer sous format JSON avec 'body'--//
+
+      body: JSON.stringify(sendFormData),
+
+      //-- Je définie l'en-tête de la requête avec 'header' --//
+
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    //-- J'envoi les données au server grace à l'objet 'options' qui contient les options définies précédemment --//
+
+    fetch("http://localhost:3000/api/products/order", options)
+      //-- Je récupère la réponse de fetch et parse celle-ci en JSON --//
+
+      .then((res) => res.json())
+
+      //-- Je nomme 'data' l'objet JSON de la réponse --//
+
+      .then((data) => {
+        //-- Je stocke l'ID de commande dans le local storage en utilisant la clé 'orderID' --//
+
+        localStorage.setItem("orderId", data.orderId);
+
+        //-- J'appelle la fonction de contrôle du formulaire --//
+
+        if (validControl()) {
+          //-- Si les données sont valides, j'utilise la propriété 'location.href' pour rediriger l'utilisateur sur une page de confirmation en suivant l'URL suivis de l'ID de commande --//
+
+          document.location.href = "confirmation.html?id=" + data.orderId;
+        }
+      });
+  });
+};
+
+//-- J'appelle enfin ma fonction postForm --//
+
+postForm();
+
+//------- Fin CART -------//
