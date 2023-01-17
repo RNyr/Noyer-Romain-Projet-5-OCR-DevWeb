@@ -50,71 +50,59 @@ fetch(`http://localhost:3000/api/products/${productId}`)
   })
   .catch(() => alert("Le serveur ne répond pas."));
 
-//---------JE RECUPERE LES DONNEES PAR RAPPORT AU CHOIX DE L'UTILISATEUR---------
+//------ LOCAL STORAGE ------//
 
+//-- Je crée les constantes pour cibler la quantité et le bouton 'addToCart' ( ajouter au panier ) dans le HTML--//
 const quantity = document.getElementById("quantity");
 const addToCart = document.getElementById("addToCart");
 
-// je configure un eventListener quand l'utilisateur clique sur ajouter au panier
+//-- Je crée un évènement au click sur le bouton 'addToCart'--//
+
 addToCart.addEventListener("click", (e) => {
   e.preventDefault();
-  let choice = {
-    id: productId,
-    image: imageUrl,
-    alt: altTxt,
-    title: title.textContent,
-    color: colors.value,
-    price: price.textContent,
-    quantity: quantity.value,
-  };
 
-  // je déclare une variable productInLocalStorage
-  // dans laquelle je mets les clés+valeurs dans le local storage
-  // JSON.parse permet de convertir les données au format JSON en objet JavaScript
-  let productInLocalStorage = JSON.parse(localStorage.getItem("product"));
+  //-- Je crée une condition pour l'ajout de produit au local storage, la couleur et la quantité doivent être sélectionné --//
+  if (colors.value !== "" && quantity.value !== "" && quantity.value !== "0") {
+    //-- Je récupère les données stockées dans le local storage sous forme de tableau, s'il n'y a pas de donnés, elle assignera un tableau vide --//
+    let productInLocalStorage =
+      JSON.parse(localStorage.getItem("product")) || [];
 
-  // j'ajoute les produits sélectionnés dans le localStorage
-  const addProductLocalStorage = () => {
-    // je récupère la sélection de l'utilisateur dans le tableau de l'objet :
-    // on peut voir dans la console qu'il y a les données,
-    // mais pas encore stockées dans le storage à ce stade
-    productInLocalStorage.push(choice);
-    // je stocke les données récupérées dans le localStorage :
-    // JSON.stringify permet de convertir les données au format JavaScript en JSON
-    // vérifier que key et value dans l'inspecteur contiennent bien des données
-    localStorage.setItem("product", JSON.stringify(productInLocalStorage));
-  };
+    //-- Je crée un objet qui contient les informations du produit sélectionné par l'utilisateur --//
+    let choice = {
+      id: productId,
+      image: imageUrl,
+      alt: altTxt,
+      title: title.textContent,
+      color: colors.value,
+      price: price.textContent,
+      quantity: parseInt(quantity.value),
+    };
 
-  let addConfirm = () => {
-    alert("Le produit a bien été ajouté au panier");
-  };
+    //-- J'utilise la méthode 'findIndex()' pour rechercher dans le tableau du local storage si un produit avec la même id et la même couleur que le produit actuellement sélectionné par l'utilisateur --//
+    let existingProductIndex = productInLocalStorage.findIndex(
+      (p) => p.id === productId && p.color === colors.value
+    );
 
-  let update = false;
-
-  // s'il y a des produits enregistrés dans le localStorage
-  if (productInLocalStorage) {
-    // verifier que le produit ne soit pas deja dans le localstorage/panier
-    // avec la couleur
-    productInLocalStorage.forEach(function (productOk, key) {
-      if (productOk.id == productId && productOk.color == colors.value) {
-        productInLocalStorage[key].quantity =
-          parseInt(productOk.quantity) + parseInt(quantity.value);
-        localStorage.setItem("product", JSON.stringify(productInLocalStorage));
-        update = true;
-        addConfirm();
-      }
-    });
-
-    if (!update) {
-      addProductLocalStorage();
-      addConfirm();
+    //-- S'il y a un produit identique dans le panier alors la quantité seulement sera mise à jour --//
+    if (existingProductIndex !== -1) {
+      productInLocalStorage[existingProductIndex].quantity += choice.quantity;
     }
+    //-- Si aucun produit identique n'est présent dans le panier alors le produit actuellement sélectionné sera ajouté via la méthode 'push --//
+    else {
+      productInLocalStorage.push(choice);
+    }
+    //-- Les données du panier sont sauvegardé dans le local storage en format JSON --//
+    localStorage.setItem("product", JSON.stringify(productInLocalStorage));
+
+    //-- Message d'alerte pour indiqué à l'utilisateur que le produit à bien été ajouter au local storage --//
+    alert("Le produit a bien été ajouté au panier");
   }
-  // s'il n'y a aucun produit enregistré dans le localStorage
+  //-- Au cas ou la couleur et la quantité n'ont pas été définis, un message d'alerte sera envoyé à l'utilisateur au lieu de stocker les données dans le local storage--//
   else {
-    // je crée alors un tableau avec les éléments choisi par l'utilisateur
-    productInLocalStorage = [];
-    addProductLocalStorage();
-    addConfirm();
+    alert(
+      "Veuillez sélectionner une couleur et une quantité avant d'ajouter au panier."
+    );
   }
 });
+
+//------- Fin PRODUCT -------//
