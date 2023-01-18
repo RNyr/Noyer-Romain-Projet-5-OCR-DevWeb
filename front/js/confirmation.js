@@ -12,6 +12,7 @@ let order = () => {
   //-- Je génère du HTML dans l'élément 'orderId' avec le contenu de la clé 'orderId' du local storage --//
 
   orderId.innerHTML = localStorage.getItem("orderId");
+  localStorage.clear();
 };
 order();
 

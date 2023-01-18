@@ -3,7 +3,10 @@
 //------ BASKET ------//
 
 //-- Je déclare une variable qui va récupérer les valeurs de la clé 'product' dans le local storage et les parse en objet javascript dans un tableau --//
-let products = JSON.parse(localStorage.getItem("product")) || [];
+
+//-------- PROBLEME A IDENTIFIER EN DESSOUS ----------//
+
+let products = JSON.parse(localStorage.getItem("product"));
 
 //-- Je vérifie la longueur du tableau 'products' si elle est égale à 0 ou false --//
 
@@ -56,71 +59,73 @@ else {
   //-- Je sélectionne l'élément 'cart__items' pour afficher tout le contenu HTML de ma variable 'itemCards' --//
 
   document.getElementById("cart__items").innerHTML = itemCards;
-
-  //--- Modifier la quantité ---//
-
-  //-- Je sélectionne tout les éléments de la page qui contienne la classe '.itemQuantity' --//
-
-  let itemQtt = document.querySelectorAll(".itemQuantity");
-
-  //-- J'utilise ensuite la méthode forEach pour parcourir chacun de ces éléments (ici ce sont des inputs) --//
-
-  itemQtt.forEach((input, i) => {
-    // -- Pour chaque input, j'ajoute un écouteur d'évènement en cas de changement de sa valeur --//
-
-    input.addEventListener("change", () => {
-      //-- Je met à jour la quantité du produit dans le tableau 'products' --//
-
-      products[i].quantity = input.value;
-
-      //-- J'enregistre le tableau 'products' dans la clé 'product' du local storage --//
-
-      localStorage.setItem("product", JSON.stringify(products));
-
-      //-- J'alerte l'utilisateur sur la modification de la quantité --//
-
-      alert("La quantité a bien été modifié.");
-
-      //-- Je recharge la page pour que les modifications apportées soit visible --//
-
-      location.reload();
-    });
-  });
-
-  //--- Supprimer un produit ---//
-
-  //-- Je sélectionne tous les éléments de la page qui contienne la classe '.deleteItem' --//
-
-  const deleteItem = document.querySelectorAll(".deleteItem");
-
-  //-- J'utilise ensuite la méthode forEach pour parcourir chacun de ces éléments (ici ce sont des button) --//
-
-  deleteItem.forEach((btn, i) => {
-    // -- Pour chaque button, j'ajoute un écouteur d'évènement en cas de click sur celui ci --//
-
-    btn.addEventListener("click", () => {
-      //-- J'utilise la méthode 'splice' pour supprimer l'élément ciblé de la boucle de mon tableau 'products' --//
-
-      products.splice(i, 1);
-
-      //-- J'enregistre le tableau 'products' dans la clé 'product' du local storage --//
-
-      localStorage.setItem("product", JSON.stringify(products));
-
-      //-- J'alerte l'utilisateur sur la suppression du produit --//
-
-      alert("Votre article a bien été supprimé.");
-
-      //-- J'utilise la méthode 'closest' pour sélectionner le premier élément parent du bouton (ici ".cart__items") puis la méthode 'remove' pour le supprimer du DOM --//
-
-      btn.closest(".cart__item").remove();
-
-      //-- Je recharge la page pour que les modifications apportées soit visible --//
-
-      location.reload();
-    });
-  });
 }
+
+//-------- PROBLEME A IDENTIFIER AU DESSUS ----------//
+
+//--- Modifier la quantité ---//
+
+//-- Je sélectionne tout les éléments de la page qui contienne la classe '.itemQuantity' --//
+
+let itemQtt = document.querySelectorAll(".itemQuantity");
+
+//-- J'utilise ensuite la méthode forEach pour parcourir chacun de ces éléments (ici ce sont des inputs) --//
+
+itemQtt.forEach((input, i) => {
+  // -- Pour chaque input, j'ajoute un écouteur d'évènement en cas de changement de sa valeur --//
+
+  input.addEventListener("change", () => {
+    //-- Je met à jour la quantité du produit dans le tableau 'products' --//
+
+    products[i].quantity = input.value;
+
+    //-- J'enregistre le tableau 'products' dans la clé 'product' du local storage --//
+
+    localStorage.setItem("product", JSON.stringify(products));
+
+    //-- J'alerte l'utilisateur sur la modification de la quantité --//
+
+    alert("La quantité a bien été modifié.");
+
+    //-- Je recharge la page pour que les modifications apportées soit visible --//
+
+    location.reload();
+  });
+});
+
+//--- Supprimer un produit ---//
+
+//-- Je sélectionne tous les éléments de la page qui contienne la classe '.deleteItem' --//
+
+const deleteItem = document.querySelectorAll(".deleteItem");
+
+//-- J'utilise ensuite la méthode forEach pour parcourir chacun de ces éléments (ici ce sont des button) --//
+
+deleteItem.forEach((btn, i) => {
+  // -- Pour chaque button, j'ajoute un écouteur d'évènement en cas de click sur celui ci --//
+
+  btn.addEventListener("click", () => {
+    //-- J'utilise la méthode 'splice' pour supprimer l'élément ciblé de la boucle de mon tableau 'products' --//
+
+    products.splice(i, 1);
+
+    //-- J'enregistre le tableau 'products' dans la clé 'product' du local storage --//
+
+    localStorage.setItem("product", JSON.stringify(products));
+
+    //-- J'alerte l'utilisateur sur la suppression du produit --//
+
+    alert("Votre article a bien été supprimé.");
+
+    //-- J'utilise la méthode 'closest' pour sélectionner le premier élément parent du bouton (ici ".cart__items") puis la méthode 'remove' pour le supprimer du DOM --//
+
+    btn.closest(".cart__item").remove();
+
+    //-- Je recharge la page pour que les modifications apportées soit visible --//
+
+    location.reload();
+  });
+});
 
 //--- Nombre total d'articles ---//
 
