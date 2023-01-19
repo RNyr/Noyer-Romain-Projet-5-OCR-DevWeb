@@ -6,46 +6,49 @@
 
 //-------- PROBLEME A IDENTIFIER EN DESSOUS ----------//
 
-let products = JSON.parse(localStorage.getItem("product"));
+let products = [];
+let productInLocalStorage = JSON.parse(localStorage.getItem("product"));
 
-//-- Je vérifie la longueur du tableau 'products' si elle est égale à 0 ou false --//
+// AFFICHER LES PRODUITS DU PANIER
 
-if (!products.length) {
-  //-- Alors on ajoute le code HTML suivant sur l'élément 'cart__items' de la page--//
+// je sélectionne la partie html concernée par la modification
+let cartAndFormContainer = document.getElementById("cartAndFormContainer");
 
+// si le panier est vide : afficher 'le panier est vide'
+if (productInLocalStorage === null || productInLocalStorage == 0) {
   document.querySelector("#cart__items").innerHTML = `
   <div class="cart__empty">
     <p>Votre panier est vide ! <br> Merci de sélectionner des produits depuis la page d'accueil</p>
   </div>`;
 }
-
-//-- Sinon on exécute le code suivant --//
+// si le panier n'est pas vide : afficher les produits dans le localStorage
 else {
-  //-- J'initialise une variable 'itemCards' vide qui va contenir la totalité des cartes d'articles des produits contenu dans le tableau 'products' --//
+  let itemCards = [];
 
-  let itemCards = "";
-  //-- J'utilise une boucle forEach pour parcourir tout les produits contenu dans le tableau 'products' --//
+  // expression initiale; condition; incrémentation
+  for (i = 0; i < productInLocalStorage.length; i++) {
+    products.push(productInLocalStorage[i].id);
 
-  products.forEach((product) => {
-    //-- Je concatène toutes les cartes d'article de la boucle à la variable 'itemCards' --//
-
-    itemCards +=
-      //-- Je crée un modèle HTML pour une carte d'article, qui affichera les données de chaque produit contenu dans le panier --//
-
-      `<article class="cart__item" data-id="${product.id}" data-color="${product.color}">
+    // le code suivant sera injecté à chaque tour de boucle
+    // selon la longueur des produits dans le local storage
+    itemCards =
+      itemCards +
+      `
+    
+    <article class="cart__item" data-id="${productInLocalStorage[i].id}" data-color="${productInLocalStorage.color}">
     <div class="cart__item__img">
-      <img src="${product.image}" alt="${product.alt}">
+      <img src="${productInLocalStorage[i].image}" alt="${productInLocalStorage[i].alt}">
     </div>
     <div class="cart__item__content">
       <div class="cart__item__content__titlePrice">
-        <h2>${product.title}</h2>
-        <p>${product.color}</p>
-        <p>${product.price} €</p>
+        <h2>${productInLocalStorage[i].title}</h2>
+        <p>${productInLocalStorage[i].color}</p>
+        <p>${productInLocalStorage[i].price} €</p>
       </div>
       <div class="cart__item__content__settings">
         <div class="cart__item__content__settings__quantity">
           <p>Qté : </p>
-          <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${product.quantity}">
+          <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${productInLocalStorage[i].quantity}">
         </div>
         <div class="cart__item__content__settings__delete">
           <p class="deleteItem">Supprimer</p>
@@ -54,11 +57,11 @@ else {
     </div>
   </article>
     `;
-  });
-
-  //-- Je sélectionne l'élément 'cart__items' pour afficher tout le contenu HTML de ma variable 'itemCards' --//
-
-  document.getElementById("cart__items").innerHTML = itemCards;
+  }
+  if (i === productInLocalStorage.length) {
+    const itemCart = document.getElementById("cart__items");
+    itemCart.innerHTML += itemCards;
+  }
 }
 
 //-------- PROBLEME A IDENTIFIER AU DESSUS ----------//
