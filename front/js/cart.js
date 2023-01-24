@@ -4,35 +4,30 @@
 
 //-- Je déclare une variable qui va récupérer les valeurs de la clé 'product' dans le local storage et les parse en objet javascript dans un tableau --//
 
-//-------- PROBLEME A IDENTIFIER EN DESSOUS ----------//
-
 let products = [];
 let productInLocalStorage = JSON.parse(localStorage.getItem("product"));
 
-// AFFICHER LES PRODUITS DU PANIER
-
-// je sélectionne la partie html concernée par la modification
-let cartAndFormContainer = document.getElementById("cartAndFormContainer");
-
-// si le panier est vide : afficher 'le panier est vide'
+//-- Je vérifie si le contenu du local storage est vide --//
 if (productInLocalStorage === null || productInLocalStorage == 0) {
+  //-- Si oui j'affiche le message suivant --//
   document.querySelector("#cart__items").innerHTML = `
   <div class="cart__empty">
     <p>Votre panier est vide ! <br> Merci de sélectionner des produits depuis la page d'accueil</p>
   </div>`;
 }
-// si le panier n'est pas vide : afficher les produits dans le localStorage
+//-- Sinon j'affiche les produits sur la page --//
 else {
-  let itemCards = [];
+  let itemsCart = [];
 
-  // expression initiale; condition; incrémentation
+  //-- Je crée une boucle qui va à chaque tour ajouter l'ID d'un produit contenu dans le local storage à un autre tableau 'products' via la méthode push --//
+
   for (i = 0; i < productInLocalStorage.length; i++) {
     products.push(productInLocalStorage[i].id);
 
-    // le code suivant sera injecté à chaque tour de boucle
-    // selon la longueur des produits dans le local storage
-    itemCards =
-      itemCards +
+    //-- A chaque tour de boucle j'ajoute une nouvelle structure HMTL à la variable 'itemsCart', pour quel contienne tout les articles du local storage --//
+
+    itemsCart =
+      itemsCart +
       `
     
     <article class="cart__item" data-id="${productInLocalStorage[i].id}" data-color="${productInLocalStorage.color}">
@@ -58,13 +53,19 @@ else {
   </article>
     `;
   }
+
+  //-- Je vérifie si la boucle à fini de parcourir les produits du local storage --//
+
   if (i === productInLocalStorage.length) {
-    const itemCart = document.getElementById("cart__items");
-    itemCart.innerHTML += itemCards;
+    //-- Je cible un élément de la page 'cart' --//
+
+    const cartItems = document.getElementById("cart__items");
+
+    //-- J'affiche le contenu de la variables 'itemsCart' en HMTL --//
+
+    cartItems.innerHTML += itemsCart;
   }
 }
-
-//-------- PROBLEME A IDENTIFIER AU DESSUS ----------//
 
 //--- Modifier la quantité ---//
 
@@ -80,11 +81,11 @@ itemQtt.forEach((input, i) => {
   input.addEventListener("change", () => {
     //-- Je met à jour la quantité du produit dans le tableau 'products' --//
 
-    products[i].quantity = input.value;
+    productInLocalStorage[i].quantity = input.value;
 
-    //-- J'enregistre le tableau 'products' dans la clé 'product' du local storage --//
+    //-- J'enregistre le tableau 'productInLocalStorage' dans la clé 'product' du local storage --//
 
-    localStorage.setItem("product", JSON.stringify(products));
+    localStorage.setItem("product", JSON.stringify(productInLocalStorage));
 
     //-- J'alerte l'utilisateur sur la modification de la quantité --//
 
@@ -108,13 +109,13 @@ deleteItem.forEach((btn, i) => {
   // -- Pour chaque button, j'ajoute un écouteur d'évènement en cas de click sur celui ci --//
 
   btn.addEventListener("click", () => {
-    //-- J'utilise la méthode 'splice' pour supprimer l'élément ciblé de la boucle de mon tableau 'products' --//
+    //-- J'utilise la méthode 'splice' pour supprimer l'élément ciblé de la boucle de mon tableau 'productInLocalStorage' --//
 
-    products.splice(i, 1);
+    productInLocalStorage.splice(i, 1);
 
-    //-- J'enregistre le tableau 'products' dans la clé 'product' du local storage --//
+    //-- J'enregistre le tableau 'productInLocalStorage' dans la clé 'product' du local storage --//
 
-    localStorage.setItem("product", JSON.stringify(products));
+    localStorage.setItem("product", JSON.stringify(productInLocalStorage));
 
     //-- J'alerte l'utilisateur sur la suppression du produit --//
 
@@ -134,9 +135,9 @@ deleteItem.forEach((btn, i) => {
 
 //-- Je déclare une fonction qui permet de calculer le nombre total d'articles dans le panier --//
 let totalArticles = () => {
-  //-- Grace à la méthode 'reduce' je parcours le tableau 'products' en accumulant une valeur. --//
+  //-- Grace à la méthode 'reduce' je parcours le tableau 'productInLocalStorage' en accumulant une valeur. --//
 
-  let totalQuantity = products.reduce(
+  let totalQuantity = productInLocalStorage.reduce(
     //-- Je prend en paramètre deux variables : 'total' qui est la valeur cumulé initialisé à 0, et 'product' qui est l'élément courant du tableau --//
 
     (total, product) =>
@@ -146,7 +147,7 @@ let totalArticles = () => {
     0
   );
 
-  //-- Cette fonction est appelée pour chaque élément du tableau 'products' et elle additionne la quantité de chaque 'product' à 'total' --//
+  //-- Cette fonction est appelée pour chaque élément du tableau 'productInLocalStorage' et elle additionne la quantité de chaque 'product' à 'total' --//
   //-- Je sélectionne l'élément 'totalQuantity' de la page pour afficher le contenu de ma variable 'totalQuantity' --//
 
   document.getElementById("totalQuantity").textContent = totalQuantity;
@@ -159,14 +160,14 @@ totalArticles();
 //--- Prix total du panier ---//
 
 let priceAmount = () => {
-  let totalPrice = products.reduce(
+  let totalPrice = productInLocalStorage.reduce(
     //-- Je retourne la somme de 'total' et le résultat du 'price' du 'product' multiplié par sa 'quantity' --//
 
     (total, product) => total + product.price * product.quantity,
     0
   );
 
-  //-- Cette fonction est appelée pour chaque élément du tableau 'products' et elle additionne le prix de chaque 'product' à 'total' --//
+  //-- Cette fonction est appelée pour chaque élément du tableau 'productInLocalStorage' et elle additionne le prix de chaque 'product' à 'total' --//
   //-- Je sélectionne l'élément 'totalPrice' de la page pour afficher tout le contenu de ma variable 'totalPrice' --//
 
   document.getElementById("totalPrice").textContent = totalPrice;
