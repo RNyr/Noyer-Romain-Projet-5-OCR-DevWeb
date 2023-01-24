@@ -229,7 +229,7 @@ let postForm = () => {
 
     //-- Je déclare une fonction pour contrôler le nom saisi dans le formulaire --//
 
-    function controlName() {
+    let controlName = () => {
       //-- Je déclare une constante qui prend la valeur de 'lastName' de l'objet 'contact' --//
 
       const validName = contact.lastName;
@@ -248,11 +248,11 @@ let postForm = () => {
 
         return false;
       }
-    }
+    };
 
     //-- Je déclare une fonction pour contrôler l'adresse saisie dans le formulaire --//
 
-    function controlAddress() {
+    let controlAddress = () => {
       //-- Je déclare une constante qui prend la valeur de 'address' de l'objet 'contact' --//
 
       const validAddress = contact.address;
@@ -272,11 +272,11 @@ let postForm = () => {
 
         return false;
       }
-    }
+    };
 
     //-- Je déclare une fonction pour contrôler le nom de la ville saisi dans le formulaire --//
 
-    function controlCity() {
+    let controlCity = () => {
       //-- Je déclare une constante qui prend la valeur de 'city' de l'objet 'contact' --//
 
       const validCity = contact.city;
@@ -296,11 +296,11 @@ let postForm = () => {
 
         return false;
       }
-    }
+    };
 
     //-- Je déclare une fonction pour contrôler l'adresse mail de la ville saisie dans le formulaire --//
 
-    function controlEmail() {
+    let controlEmail = () => {
       //-- Je déclare une constante qui prend la valeur de 'email' de l'objet 'contact' --//
 
       const validEmail = contact.email;
@@ -319,11 +319,11 @@ let postForm = () => {
 
         return false;
       }
-    }
+    };
 
     //-- Je vérifie si toute les données saisies dans le formulaire sont valides en appellant les différentes fonctions de contrôle--//
 
-    function validControl() {
+    let validControl = () => {
       if (
         controlFirstName() &&
         controlName() &&
@@ -341,7 +341,7 @@ let postForm = () => {
       else {
         alert("Merci de revérifier les données du formulaire");
       }
-    }
+    };
 
     //-- J'appelle la fonction du contrôle des données saisies --//
     validControl();
